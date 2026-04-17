@@ -1,0 +1,53 @@
+venv/
+__pycache__/
+*.pyc
+.env
+
+# Data (training only)
+data/raw/*
+data/processed/*
+
+# Ignore all models by default
+models/*
+
+# ✅ BUT allow production baseline model
+!models/baseline/
+!models/baseline/best_baseline_model.joblib
+
+# OS / misc
+.DS_Store
+.ipynb_checkpoints/
+
+
+
+
+
+
+
+
+
+cat > .gitignore << 'EOF'
+.venv/
+venv/
+env/
+
+__pycache__/
+*.py[cod]
+*.pyo
+
+.pytest_cache/
+.ipynb_checkpoints/
+
+logs/
+*.log
+
+reports/
+data/processed/
+data/engineered/
+data/final/
+
+models/
+
+.DS_Store
+Thumbs.db
+EOF
