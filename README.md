@@ -17,7 +17,6 @@ Bu loyiha `hotel_bookings_updated_2024.csv` dataset asosida booking cancel bo‘
 - CI/CD
 - AWS EC2
 
-Bu versiyada **tuning yo‘q**. `merged` papkasi ham ishlatilmaydi.
 
 ---
 
@@ -116,7 +115,7 @@ Tanlangan final model:
 
 ---
 
-# Siz so‘ragan tartib aynan mana shu:
+# tartib
 # 1. Requirements.txt (pipreqs)
 # 2. FastAPI
 # 3. Docker
@@ -134,7 +133,7 @@ Uni oddiy install qilish:
 pip install -r requirements.txt
 ```
 
-Agar aynan `pipreqs` orqali qayta generatsiya qilmoqchi bo‘lsangiz:
+Agar aynan `pipreqs` orqali qayta generatsiya qilmoqchi bo‘lsak:
 ```bash
 chmod +x scripts/generate_requirements_pipreqs.sh
 ./scripts/generate_requirements_pipreqs.sh
@@ -339,7 +338,7 @@ Tavsiya:
 - key pair yarating va `.pem` faylni saqlang
 
 #### 2-qadam. Security Group
-Oching:
+Ochamiz:
 - `22` port — SSH
 - `80` port — HTTP
 - `8000` port — test uchun ixtiyoriy
@@ -488,8 +487,7 @@ chmod +x deployment/ec2_run_container.sh
 
 ## Muhim eslatmalar
 
-1. `merged` papkasi kerak emas va ishlatilmaydi.  
-2. `tuning` bu versiyada yo‘q.  
-3. `best_model.joblib` prediction uchun ishlatiladi.  
-4. Docker container model bo‘lmasa o‘zi pipeline ishlatadi.  
-5. EC2 deployment Docker + Nginx oqimida qurilgan.  
+
+1. `best_model.joblib` prediction uchun ishlatiladi.  
+2. Docker container model bo‘lmasa o‘zi pipeline ishlatadi.  
+3. EC2 deployment Docker + Nginx oqimida qurilgan.  
