@@ -4,48 +4,59 @@ from pathlib import Path
 import sys
 from typing import Any
 
+from fastapi import FastAPI, HTTPException
+
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.append(str(PROJECT_ROOT))
 
-from fastapi import FastAPI, HTTPException
-from pydantic import BaseModel, Field
-
+from app.schemas import PredictionRequest, PredictionResponse
+from src.hotel_booking_ml.config import BEST_MODEL_PATH
 from src.hotel_booking_ml.inference.predict import predict_single
 from src.hotel_booking_ml.inference.sample_payload import EXAMPLE_BOOKING
 
 app = FastAPI(
     title="Hotel Booking Cancellation API",
-    version="2.0.0",
+    version="3.0.0",
     description="Hotel booking cancel bo‘lish ehtimolini qaytaruvchi FastAPI servis.",
 )
-
-class PredictionRequest(BaseModel):
-    booking: dict[str, Any] = Field(..., description="Bitta booking yozuvi")
-    threshold: float = Field(default=0.5, ge=0.0, le=1.0)
 
 
 @app.get("/")
 def root() -> dict[str, str]:
-    return {"message": "Hotel Booking Cancellation API ishlayapti. /docs ga kiring."}
+    return {
+        "message": "Hotel Booking Cancellation API ishlayapti.",
+        "docs": "/docs",
+        "health": "/health",
+    }
+
 
 @app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}
+def health() -> dict[str, Any]:
+    return {
+        "status": "ok",
+        "model_ready": BEST_MODEL_PATH.exists(),
+        "model_path": str(BEST_MODEL_PATH),
+    }
+
 
 @app.get("/example")
 def example() -> dict[str, Any]:
-    return EXAMPLE_BOOKING
+    return {
+        "booking": EXAMPLE_BOOKING,
+        "threshold": 0.5,
+    }
 
-@app.post("/predict")
-def predict(request: PredictionRequest) -> dict[str, Any]:
+
+@app.post("/predict", response_model=PredictionResponse)
+def predict(request: PredictionRequest) -> PredictionResponse:
     try:
-        result = predict_single(request.booking, threshold=request.threshold)
-        return {
-            "success": True,
-            "threshold": request.threshold,
-            "result": result,
-        }
+        result = predict_single(request.booking.model_dump(), threshold=request.threshold)
+        return PredictionResponse(
+            success=True,
+            threshold=request.threshold,
+            result=result,
+        )
     except FileNotFoundError as error:
         raise HTTPException(status_code=404, detail=str(error)) from error
     except Exception as error:

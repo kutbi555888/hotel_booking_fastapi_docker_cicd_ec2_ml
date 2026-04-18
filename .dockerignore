@@ -1,6 +1,20 @@
-__pycache__/
-*.pyc
-.pytest_cache/
-.ipynb_checkpoints/
+cat > .dockerignore << 'EOF'
 .venv/
-my_env/
+.git/
+__pycache__/
+**/__pycache__/
+*.pyc
+**/*.pyc
+.pytest_cache/
+**/.pytest_cache/
+.ipynb_checkpoints/
+logs/
+*.log
+reports/
+data/processed/
+data/engineered/
+data/final/
+tests/
+deployment/
+.github/
+EOF
